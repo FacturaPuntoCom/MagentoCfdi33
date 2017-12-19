@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Facturacom_Facturacion>
+            <version>2.0.0</version>
+        </Facturacom_Facturacion>
+    </modules>
+
+    <global>
+        <!-- Helpers -->
+        <helpers>
+            <facturacom_facturacion>
+                <class>Facturacom_Facturacion_Helper</class>
+            </facturacom_facturacion>
+        </helpers>
+        <!-- Blocks -->
+        <blocks>
+            <facturacom_facturacion>
+                <class>Facturacom_Facturacion_Block</class>
+            </facturacom_facturacion>
+        </blocks>
+        <!-- Models -->
+        <models>
+            <!-- DB resource -->
+            <facturacom_facturacion>
+                <class>Facturacom_Facturacion_Model</class>
+                <resourceModel>facturacom_facturacion_mysql4</resourceModel>
+            </facturacom_facturacion>
+            <!-- DB resource tables -->
+            <facturacom_facturacion_mysql4>
+                <class>Facturacom_Facturacion_Model_Mysql4</class>
+                <entities>
+                    <conf>
+                        <table>facturacom_facturacion_conf</table>
+                    </conf>
+                    <invoices>
+                        <table>facturacom_facturacion_invoices</table>
+                    </invoices>
+                </entities>
+            </facturacom_facturacion_mysql4>
+        </models>
+        <!-- Install resource -->
+        <resources>
+            <facturacom_facturacion_setup>
+                <setup>
+                    <module>Facturacom_Facturacion</module>
+                </setup>
+            </facturacom_facturacion_setup>
+        </resources>
+    </global>
+
+    <frontend>
+        <routers>
+            <facturacion>
+                <use>standard</use>
+                <args>
+                    <module>Facturacom_Facturacion</module>
+                    <frontName>facturacion</frontName>
+                </args>
+            </facturacion>
+        </routers>
+        <layout>
+            <updates>
+                <facturacion>
+                    <file>facturacion.xml</file>
+                </facturacion>
+            </updates>
+        </layout>
+    </frontend>
+
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <Facturacom_Facturacion before="Mage_Adminhtml">Facturacom_Facturacion_Adminhtml</Facturacom_Facturacion>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+
+    <adminhtml>
+        <layout>
+            <updates>
+                <facturacom_facturacion>
+                    <file>facturacom/facturacion.xml</file>
+                </facturacom_facturacion>
+            </updates>
+        </layout>
+    </adminhtml>
+
+</config>

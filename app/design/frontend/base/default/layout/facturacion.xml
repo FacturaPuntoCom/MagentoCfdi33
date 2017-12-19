@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <facturacion_index_index>
+
+        <reference name="head">
+            <action method="addItem">
+                <type>skin_js</type><name>facturacom/js/jquery/1.12.4/jquery.min.js</name>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type><name>facturacom/js/functions.js</name>
+            </action>
+            <action method="addCss">
+                <stylesheet>facturacom/css/facturacom.css</stylesheet>
+            </action>
+        </reference>
+    </facturacion_index_index>
+    <facturacion_index_index>
+        <reference name="root">
+            <action method="setTemplate"><template>page/1column.phtml</template></action>
+        </reference>
+        <reference name="content">
+            <block type="facturacom_facturacion/widget" name="widget"
+                    template="facturacion/factura.phtml" />
+        </reference>
+    </facturacion_index_index>
+</layout>

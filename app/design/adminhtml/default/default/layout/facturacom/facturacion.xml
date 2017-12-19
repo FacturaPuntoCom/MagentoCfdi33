@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<layout>
+    <adminhtml_invoices_index>
+        <reference name="content">
+            <!-- Define the block by namespace_modulename/adminhtml_controllername -->
+            <block type="facturacom_facturacion/adminhtml_invoices" name="facturacom_facturacion_invoices" />
+        </reference>
+    </adminhtml_invoices_index>
+</layout>

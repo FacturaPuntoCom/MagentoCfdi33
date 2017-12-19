@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<config>
+    <!-- Manu in admin panel -->
+    <menu>
+        <sales>
+            <children>
+                <facturacom_facturacion_invoices translate="title" module="facturacom_facturacion">
+                    <title>Facturación</title>
+                    <action>adminhtml/invoices</action>
+                </facturacom_facturacion_invoices>
+            </children>
+        </sales>
+    </menu>
+    <!-- Permissions -->
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <sales>
+                        <children>
+                            <facturacom_facturacion_invoices>
+                                <title>Invoices</title>
+                            </facturacom_facturacion_invoices>
+                        </children>
+                    </sales>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

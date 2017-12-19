@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Facturacom_Facturacion>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Facturacom_Facturacion>
+    </modules>
+</config>
