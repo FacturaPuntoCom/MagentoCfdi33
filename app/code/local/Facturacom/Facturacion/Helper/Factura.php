@@ -7,15 +7,7 @@
  * – saveLocalOrder
  * – getCustomerByRFC
  * – getAccountDetails
- * – getPaymentMethods
- * – getPaymentMethodsType
- * - getSeries
- * - getRegimen
- * - getTipoRelacion
- * - getUsoCFDI
  * – createCustomer
- * - dd
- * - limit_text
  * – createInvoice
  * – setCookie
  * – getCookie
@@ -73,170 +65,20 @@ class Facturacom_Facturacion_Helper_Factura extends Mage_Core_Helper_Abstract
         $apimethod = 'clients/' . $customerRfc;
         $request = 'GET';
 
-        $customer = $this->apiCall($apimethod, $request);
-
-        return $customer;
+        return $this->apiCall($apimethod, $request);
     }
 
-    /**
+    /*
 	 * Create invoice in factura.com system
 	 *
 	 * @return Object
+	 *
 	 */
     public function getAccountDetails(){
         $apimethod = 'current/account';
         $request = 'GET';
 
         return $this->apiCall($apimethod, $request);
-    }
-
-    /**
-     * Get Payment Method Types from Factura.com API.
-     *
-     * @return Object
-     */
-    public function getPaymentMethodsType(){
-        $apimethod = 'catalogo/FormaPago';
-        $request = 'GET';
-        $data = $this->apiCall($apimethod, $request, null, null, 3)->data;
-        $types = array();
-
-        foreach ($data as $value) {
-            $types[$value->key] = $value->name;
-        }
-
-        return $types;
-    }
-
-    /**
-     * Get Payment Methods from Factura.com API.
-     *
-     * @return Object
-     */
-    public function getPaymentMethods(){
-        $apimethod = 'catalogo/MetodoPago';
-        $request = 'GET';
-        $data = $this->apiCall($apimethod, $request, null, null, 3)->data;
-        $methods = array();
-
-        foreach ($data as $value) {
-            $methods[$value->key] = $value->name;
-        }
-
-        return $methods;
-    }
-
-    /**
-     * Get Countries
-     *
-     * @return Object
-     */
-    public function getCountries(){
-        $apimethod = 'catalogo/Pais';
-        $request = 'GET';
-        $data = $this->apiCall($apimethod, $request, null, null, 3)->data;
-        $countries = array();
-
-        foreach ($data as $value) {
-            $countries[$value->key] = $value->name;
-        }
-
-        return $countries;
-    }
-
-    /**
-     * Get units from the catalog.
-     *
-     * @return array
-     */
-    public function getSeries(){
-        $apimethod = 'series';
-        $request = 'GET';
-
-        $data = $this->apiCall($apimethod, $request)->data;
-        $response = array();
-
-        foreach ($data as $key => $value) {
-            $response[$value->SerieID] = 'Serie: ' . $value->SerieName . ' - Tipo: ' . $value->SerieType;
-        }
-
-        return $response;
-    }
-
-    /**
-     * Get Regimen Fiscal from the catalog.
-     *
-     * @return array
-     */
-    public function getMoneda(){
-        $apimethod = 'catalogo/Moneda';
-        $request = 'GET';
-
-        $data = $this->apiCall($apimethod, $request, null, null, 3)->data;
-        $response = array();
-
-        foreach ($data as $key => $value) {
-            $response[$value->key] = $value->name;
-        }
-
-        return $response;
-    }
-
-    /**
-     * Get Regimen Fiscal from the catalog.
-     *
-     * @return array
-     */
-    public function getRegimen(){
-        $apimethod = 'catalogo/RegimenFiscal';
-        $request = 'GET';
-
-        $data = $this->apiCall($apimethod, $request, null, null, 3)->data;
-        $response = array();
-
-        foreach ($data as $key => $value) {
-            $response[$value->key] = $value->name;
-        }
-
-        return $response;
-    }
-
-    /**
-     * Get Regimen Fiscal from the catalog.
-     *
-     * @return array
-     */
-    public function getTipoRelacion(){
-        $apimethod = 'catalogo/Relacion';
-        $request = 'GET';
-
-        $data = $this->apiCall($apimethod, $request, null, null, 3)->data;
-        $response = array();
-
-        foreach ($data as $key => $value) {
-            $response[$value->key] = $value->name;
-        }
-
-        return $response;
-    }
-
-    /**
-     * Get Uso CFDI from the catalog.
-     *
-     * @return array
-     */
-    public function getUsoCFDI(){
-        $apimethod = 'catalogo/UsoCfdi';
-        $request = 'GET';
-
-        $data = $this->apiCall($apimethod, $request, null, null, 3)->data;
-        $response = array();
-
-        foreach ($data as $key => $value) {
-            $response[$value->key] = $value->name;
-        }
-
-        return $response;
     }
 
     /**
@@ -269,168 +111,117 @@ class Facturacom_Facturacion_Helper_Factura extends Mage_Core_Helper_Abstract
             'estado'          => $data['f_estado'],
             'ciudad'          => $data['f_municipio'],
             'delegacion'      => $data['f_municipio'],
-            'pais'            => $data['f_pais'],
             'save'            => true,
         );
-
-        if ($data['f_pais'] != 'MEX' && isset($data['f_numregidtrib'])) {
-            $params['numregidtrib'] = $data['f_numregidtrib'];
-        }
 
         return $this->apiCall($apimethod, $request, $params);
     }
 
-    private function dd($args, $die = false){
-        echo "<pre>";
-        print_r($args);
-        echo "<pre>";
-
-        if($die) die;
-    }
-
-    /**
-     * Limit a string to the limir given, in order to short the product description.
-     *
-     * @param string $text
-     * @param int $limit
-     * @return string
-     */
-    private function limit_text($text, $limit) {
-        if (str_word_count($text, 0) > $limit) {
-            $words = str_word_count($text, 2);
-            $pos = array_keys($words);
-            $text = substr($text, 0, $pos[$limit]) . '...';
-        }
-
-        return str_replace(array("\r", "\n"), ' ', $text);
-    }
-
-    /**
+    /*
 	 * Create invoice in factura.com system
 	 *
 	 * @param String $payment_m
 	 * @param String $payment_t
-	 * @param String $t_payment_m
-	 * @param String $t_payment_t
 	 * @param String $num_cta_m
 	 * @return Object
+	 *
 	 */
-    public function createInvoice($payment_m, $payment_t, $t_payment_m, $t_payment_t, $num_cta_m){
-        $apimethod = 'cfdi33/create';
-        $request = 'POST';
+    public function createInvoice($payment_m, $payment_t, $num_cta_m){
 
-        //get configuration pligun taxes
-        $model_conf = Mage::getModel('facturacom_facturacion/conf');
-        $collectionConfig = current($model_conf->getCollection()->getData());
-        $model_conf->load($collectionConfig['id']);
-        $exchangerateapikey = $model_conf->getExchangerateapikey();
+        $apimethod = 'invoice/create';
+        $request = 'POST';
 
         $order = json_decode($this->getCookie('order'));
         $products = json_decode($this->getCookie('line_items'));
         $customer = json_decode($this->getCookie('customer'));
 
-        $concepts = array();
+        $items = array();
         $discount = 0;
+        $calculate_tax = 1.16;
 
-        foreach($products as $product){
-            $_product = Mage::getModel('catalog/product')->load($product->product_id);
+        foreach($products as $product):
+            $unidad = "Producto"; //o producto o servicio (TG no devuelve esto)
+            $ivaconfig = $product->ivaconfig;
+
+            if($ivaconfig == 0){
+                $calculate_tax = 1;
+            }
+
+            $product_price = ($product->price/$product->qty) / $calculate_tax;
             $discount += $product->discount;
 
-            // Taxes
-            $tax_base = $product->base_price * $product->qty;
-            $tax_tasa = 0.16;
-            $tax_importe = $tax_base * $tax_tasa;
-            $impuestos = array();
-            $impuestos["Traslados"][0] = array(
-                "Base" => round($tax_base, 2),
-                "Impuesto" => "002",
-                "TipoFactor" => "Tasa",
-                "TasaOCuota" => $tax_tasa,
-                "Importe" => round($tax_importe, 2),
+            $ivaconcept = ($ivaconfig == 1) ? "yes" : "no";
+
+            $product_data = array(
+                'cantidad'  => $product->qty,
+                'unidad'    => $unidad,
+                'concept'   => $product->name,
+                'precio'    => $product_price,
+                'ivaconcept' => $ivaconcept,
+                'subtotal'  => $product_price * $product->qty,
             );
 
-            // si tiene activado IEPS, agregar a impuestos.
-            if ($model_conf->getIepsconfig() && $_product->getData('usaIeps') && $product->shipping == false) {
-                $ieps_rate = (null !== $model_conf->getIepscalc()) ? $model_conf->getIepscalc() : 0;
-                $ieps_tasa = $ieps_rate / 100;
-                $ieps_importe = $tax_base * $ieps_tasa;
+            // echo "<pre>";
+            // var_dump($product);
+            // var_dump($product_data);
+            // die;
 
-                $iesp_tmp = array(
-                    "Base" => round($tax_base, 2),
-                    "Impuesto" => "003",
-                    "TipoFactor" => "Tasa",
-                    "TasaOCuota" => $ieps_tasa,
-                    "Importe" => round($ieps_importe, 2),
-                );
+            array_push($items, $product_data);
+        endforeach;
 
-                array_push($impuestos["Traslados"], $iesp_tmp);
-            }
+        switch ($payment_m) {
+            case '03':
+                $payment_method = $payment_m;
+                $numero_cuenta  = $num_cta_m;
+                break;
 
-            if($product->shipping){
-                $product_data = array(
-                    "ClaveProdServ" => '78102203',
-                    "Cantidad" => $product->qty,
-                    "ClaveUnidad" => 'E48',
-                    "Unidad" => 'Unidad de Servicio',
-                    "ValorUnitario" => round($product->base_price, 2),
-                    "Descripcion" => $this->limit_text($product->name, 100),
-                    "Descuento" => round($product->discount, 2),
-                    "Impuestos" => $impuestos,
-                );
-            }else{
-                $product_data = array(
-                    "ClaveProdServ" => $_product->getData('claveProdServ'),
-                    "NoIdentificacion" => $_product->getSKU(),
-                    "Cantidad" => $product->qty,
-                    "ClaveUnidad" => $_product->getData('claveUnidad'),
-                    "Unidad" => $_product->getData('textoUnidad'),
-                    "ValorUnitario" => round($product->base_price, 2),
-                    "Descripcion" => $this->limit_text($_product->getShortDescription(), 100),
-                    "Descuento" => round($product->discount, 2),
-                    "Impuestos" => $impuestos,
-                );
-            }
+            case '04':
+                $payment_method = $payment_m;
+                $numero_cuenta  = $num_cta_m;
+                break;
 
-            array_push($concepts, $product_data);
+            case '28':
+                $payment_method = $payment_m;
+                $numero_cuenta  = $num_cta_m;
+                break;
+
+            default:
+                $payment_method = $payment_m;
+                $numero_cuenta  = "No Identificado";
+                break;
         }
 
-        // Moneda y Tipo de Cambio
-        $moneda_config = $model_conf->getMoneda();
+        //Getting configuration
+        $conf = (object) current(Mage::getModel('facturacom_facturacion/conf')->getCollection()->getData());
+        $serie = $conf->serie;
 
         $params = array(
-            "Receptor" => array(
-                "UID" => $customer->Data->UID,
-            ),
-            "TipoDocumento" => "factura",
-            "Conceptos" => $concepts,
-            "UsoCFDI" => $model_conf->getUso_cfdi(),
-            "Serie" => $model_conf->getSerie(),
-            "Redondeo" => 2,
-            "FormaPago" => $t_payment_m,
-            "MetodoPago" => $payment_m,
-            "CondicionesDePago" => "",
-            "Relacionados" => array(),
-            "Moneda" => $moneda_config,
-            "NumOrder" => $order->order_number,
-            "Comentarios" => "",
-            "EnviarCorreo" => 'true'
+            'rfc' => $customer->Data->RFC,
+            'items' => $items,
+            'numerocuenta' => $numero_cuenta,
+            'formapago' => 'Pago en una Sola Exhibicion',
+            'metodopago' => $payment_method,
+            'currencie' => 'MXN',
+            'iva' => 1,
+            'num_order' => $order->order_number,
+            'seriefactura' => $serie,
+            // 'save' => true,
+            'descuento' => abs($order->total_discount), //$discount - ($discount * 0.16),//sacar descuentos totales
+            'send_email' => true,
         );
 
-        if ($moneda_config != 'MXN') {
-            $exchange_rate = $this->getExchangeRate($exchangerateapikey, $moneda_config);
-            if($exchange_rate){
-                $params["TipoCambio"] = $exchange_rate;
-            }
-        }
+        // echo "<pre>";
+        // var_dump($params);
+        // die;
 
-        $invoice = $this->apiCall($apimethod, $request, $params, null, 3);
+        $invoice = $this->apiCall($apimethod, $request, $params);
 
-        if($invoice->data->response == 'success'){
+        if($invoice->status == 'success'){
             //save order into orders db table
             $order_data = array(
                 'order_number'  => $order->order_number,
                 'id'            => $order->id,
-                'f_uid'         => $invoice->data->invoice_uid,
+                'f_uid'         => $invoice->invoice_uid,
                 'source'        => 'magento',
             );
             $this->saveLocalOrder($order_data);
@@ -441,49 +232,20 @@ class Facturacom_Facturacion_Helper_Factura extends Mage_Core_Helper_Abstract
     }
 
     /**
-     * Get exchange rate from currency given to MXN.
-     *
-     * @param String $exchangerateapikey
-     * @param String $from
-     * @param String $to
-     * @return float
-     */
-    private function getExchangeRate($exchangerateapikey, $from, $to = 'MXN'){
-        $url = 'https://forex.1forge.com/1.0.2/convert?from='.$from.'&to='.$to.'&quantity=1&api_key='.$exchangerateapikey;
-        $result = file_get_contents($url);
-        $result = json_decode($result);
-
-        if (isset($result->error)) {
-            return false;
-        }
-
-        return $result->value;
-    }
-
-    /**
      * Execute curl call to Factura.com's API
      *
      * @param String $apimethod
      * @param String $request
      * @param Array $params
-     * @param Boolean $debug
-     * @param String $version
      * @return Object
      */
-    private function apiCall($apimethod, $request, $params = null, $debug = null, $version = null){
+    private function apiCall($apimethod, $request, $params = null, $debug = null){
 
         //Getting configuration data
         $conf = (object) current(Mage::getModel('facturacom_facturacion/conf')->getCollection()->getData());
-        $apiurl = $conf->apiurl;
-
-        if($version == 3){
-            $apiurl .= 'v3/';
-        }else{
-            $apiurl .= 'v1/';
-        }
 
         $ch = curl_init();
-        $url = $apiurl . $apimethod;
+        $url = $conf->apiurl . $apimethod;
 
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -508,8 +270,7 @@ class Facturacom_Facturacion_Helper_Factura extends Mage_Core_Helper_Abstract
             curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
             curl_setopt($ch, CURLOPT_HTTPHEADER, $httpheader);
             if($debug == true){
-                echo "<pre>";
-                print_r($dataString);
+                var_dump($dataString);
             }
         }else{
             curl_setopt($ch, CURLOPT_HTTPHEADER, array(
@@ -529,7 +290,7 @@ class Facturacom_Facturacion_Helper_Factura extends Mage_Core_Helper_Abstract
             }
             curl_close($ch);
         }catch(Exception $e){
-            print('Exception occured: ' . $e->getMessage());die;
+            print('Exception occured: ' . $e->getMessage());
         }
 
         return json_decode($data);
