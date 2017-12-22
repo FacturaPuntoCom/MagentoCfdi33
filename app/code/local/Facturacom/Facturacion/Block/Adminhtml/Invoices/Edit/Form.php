@@ -44,16 +44,7 @@ class Facturacom_Facturacion_Block_Adminhtml_Invoices_Edit_Form extends Mage_Adm
             ));
         }
 
-        //form fields to edit configuration
-        $fieldset->addField('sandbox', 'checkbox', array(
-            'name'  => 'sandbox',
-            'label' => Mage::helper('checkout')->__('Sandbox Mode'),
-            'onclick'   => 'this.value = this.checked ? 1 : 0;',
-            'checked' => $model->getSandbox(),
-            'required' => false,
-            'after_element_html' => 'Usar el ambiente de Desarrollo.<p class="nm"><small>Marque esta opción sólo si está probando el Módulo, ya que las facturas creadas no serán válidas.</small></p>',
-        ));
-
+        //form fields to create/edit invoice
         $fieldset->addField('apikey', 'text', array(
             'name'      => 'apikey',
             'label'     => Mage::helper('checkout')->__('Api Key'),
@@ -70,34 +61,12 @@ class Facturacom_Facturacion_Block_Adminhtml_Invoices_Edit_Form extends Mage_Adm
             'after_element_html' => '<p class="nm"><small>' . ' Lo obtienes en tu administrador de factura.com' . '</small></p>',
         ));
 
-        $series = Mage::registry('facturacom_facturacion_series');
-        $fieldset->addField('serie', 'select', array(
+        $fieldset->addField('serie', 'text', array(
             'name'      => 'serie',
             'label'     => Mage::helper('checkout')->__('Serie'),
             'title'     => Mage::helper('checkout')->__('Serie'),
-            'required'  => false,
-            'options' => $series,
-            'after_element_html' => '<p class="nm"><small>' . 'Selecciona la serie con la que se va a crear la factura. (Importante guardar API KEY y SECRET KEY para obtener las Series).' . '</small></p>',
-        ));
-
-        $moneda = Mage::registry('facturacom_facturacion_moneda');
-        $fieldset->addField('moneda', 'select', array(
-            'name'      => 'moneda',
-            'label'     => Mage::helper('checkout')->__('Moneda'),
-            'title'     => Mage::helper('checkout')->__('Moneda'),
-            'required'  => false,
-            'options' => $moneda,
-            'after_element_html' => '<p class="nm"><small>' . 'Selecciona la Moneda.' . '</small></p>',
-        ));
-
-        $usoCfdi = Mage::registry('facturacom_facturacion_usocfdi');
-        $fieldset->addField('uso_cfdi', 'select', array(
-            'name'      => 'uso_cfdi',
-            'label'     => Mage::helper('checkout')->__('Uso de CFDI'),
-            'title'     => Mage::helper('checkout')->__('Uso de CFDI'),
-            'required'  => false,
-            'options' => $usoCfdi,
-            'after_element_html' => '<p class="nm"><small>' . 'Selecciona el Uso de CFDI para crear facturas.' . '</small></p>',
+            'required'  => true,
+            'after_element_html' => '<p class="nm"><small>' . ' La obtienes en tu administrador de factura.com' . '</small></p>',
         ));
 
         $fieldset->addField('dayoff', 'select', array(
@@ -172,7 +141,6 @@ class Facturacom_Facturacion_Block_Adminhtml_Invoices_Edit_Form extends Mage_Adm
             'label'     => Mage::helper('checkout')->__('Color de fondo del header del widget'),
             'title'     => Mage::helper('checkout')->__('Color de fondo del header del widget'),
             'required'  => true,
-            'style' => 'width: 280px !important',
             'after_element_html' => '<p class="nm"><small>' . ' Color de fondo del header del widget que se mostrará en el área de clientes (Ejemplo: #EFF0F1)' . '</small></p>',
         ));
 
@@ -181,38 +149,16 @@ class Facturacom_Facturacion_Block_Adminhtml_Invoices_Edit_Form extends Mage_Adm
             'label'     => Mage::helper('checkout')->__('Color de letra del header del widget'),
             'title'     => Mage::helper('checkout')->__('Color de letra del header del widget'),
             'required'  => true,
-            'style' => 'width: 280px !important',
             'after_element_html' => '<p class="nm"><small>' . ' Color de letra del header del widget que se mostrará en el área de clientes (Ejemplo: #393318)' . '</small></p>',
         ));
 
-        $iva_fieldset = $fieldset->addFieldset('taxes_config', array(
-            'legend' => 'Configuración de Impuestos',
-        ));
-
-        $fieldset->addField('exchangerateapikey', 'text', array(
-            'name'      => 'exchangerateapikey',
-            'label'     => Mage::helper('checkout')->__('1forge Api Key'),
-            'title'     => Mage::helper('checkout')->__('1forge Api Key'),
-            'required'  => false,
-            'after_element_html' => '<p class="nm"><small>' . ' Lo obtienes en tu panel de <a href="https://1forge.com" target="_blank">https://1forge.com</a>' . '</small></p>',
-        ));
-
-        $iva_fieldset->addField('iepsconfig', 'checkbox', array(
-            'name' => 'iepsconfig',
-            'label' => Mage::helper('checkout')->__('Activar IEPS'),
-            'onclick'   => 'this.value = this.checked ? 1 : 0;',
-            'checked' => $model->getIepsconfig(),
+        $fieldset->addField('ivaconfig', 'checkbox', array(
+            'name'  => 'ivaconfig',
+            'label' => Mage::helper('checkout')->__('Mis precios manejan IVA'),
+            'onclick' => 'this.value = this.checked ? 1 : 0;',
+            'checked' => $model->getIvaconfig(),
             'required' => false,
-            'after_element_html' => 'Activar el calculo de IEPS.<p class="nm"><small>Marque esta opción si los productos (o algunos) tienen IEPS.</small></p>',
-        ));
-
-        $iva_fieldset->addField('iepscalc', 'text', array(
-            'name'      => 'iepscalc',
-            'label'     => Mage::helper('checkout')->__('Porcentaje de IEPS'),
-            'title'     => Mage::helper('checkout')->__('Porcentaje de IEPS'),
-            'required'  => false,
-            'style' => 'width: 80px !important',
-            'after_element_html' => '%<p class="nm"><small>' . 'Establecer el porcentaje de IEPS a calcular (SIN EL signo %). <em>Es necesario sólo si la opción Activar IEPS está habilitada.</em>' . '</small></p>',
+            'after_element_html' => '<p class="nm"><small>Marque esta opción si los precios no incluyen IVA pero manejan el configurado en el sistema.</small></p>',
         ));
 
         $form->setValues($model->getData());

@@ -9,9 +9,8 @@ class Facturacom_Facturacion_Block_Adminhtml_Invoices extends Mage_Adminhtml_Blo
         // ie. facturacom_facturacion/adminhtml_invoices
         $this->_blockGroup = 'facturacom_facturacion';
         $this->_controller = 'adminhtml_invoices';
-        $this->_headerText = $this->__('Facturas generadas');
+        $this->_headerText = $this->__('Configuración');
         $this->_addButtonLabel = Mage::helper('facturacom_facturacion')->__('Configuración');
-
         parent::__construct();
     }
 }

@@ -40,6 +40,7 @@ class Facturacom_Facturacion_IndexController extends Mage_Core_Controller_Front_
 
              //search order in Magento
              $order = $orderhelper->getOrderByNum($orderNum);
+
              //check if order exists
              if(!isset($order->id)){
                  $response = array(
@@ -50,59 +51,53 @@ class Facturacom_Facturacion_IndexController extends Mage_Core_Controller_Front_
              //check for the order status "complete"
                  if(in_array($order->status, array('complete','processing'), true )){
 
-                    if(!$this->validateDayOff($order->payment_day)) {
+                     if($order->customer_email == $email){
 
-                      $response = array(
-                          'error' => 400,
-                          'message' => 'La fecha para facturar tu pedido ya pasó!'
-                      );
+                         $orderLocal = $facturahelper->getOrderFromLocal($orderNum);
 
-                    } else {
+                         if(isset($orderLocal['id'])){
+                             $response = array(
+                                 'error' => 300,
+                                 'message' => 'Este pedido ya se encuentra facturado.',
+                                 'data' => array(
+                                     'order_local' => $orderLocal
+                                 )
+                             );
+                         }else{
 
-                       if($order->customer_email == $email){
+                             //Get customer by RFC
+                             $customer  = $facturahelper->getCustomerByRFC($customerRfc);
+                             //Get order lines
+                             $orderEntity = $orderhelper->getOrderEntity($orderNum);
+                             $lineItems = $orderhelper->getOrderLines($orderEntity);
 
-                           $orderLocal = $facturahelper->getOrderFromLocal($orderNum);
+                            //   echo "<pre>";
+                            //   var_dump($order);
+                            //   var_dump($lineItems);
+                            //   die;
 
-                           if(isset($orderLocal['id'])){
-                               $response = array(
-                                   'error' => 300,
-                                   'message' => 'Este pedido ya se encuentra facturado.',
-                                   'data' => array(
-                                       'order_local' => $orderLocal
-                                   )
-                               );
-                           }else{
+                             //Guardar información premilinarmente en cookies
+                             $facturahelper->setCookie('order', json_encode($order));
+                             $facturahelper->setCookie('customer', json_encode($customer));
+                             $facturahelper->setCookie('line_items', json_encode($lineItems));
 
-                               //Get customer by RFC
-                               $customer  = $facturahelper->getCustomerByRFC($customerRfc);
-                               //Get order lines
-                               $orderEntity = $orderhelper->getOrderEntity($orderNum);
-                               $lineItems = $orderhelper->getOrderLines($orderEntity);
-
-                               //Guardar información premilinarmente en cookies
-                               $facturahelper->setCookie('order', json_encode($order));
-                               $facturahelper->setCookie('customer', json_encode($customer));
-                               $facturahelper->setCookie('line_items', json_encode($lineItems));
-
-                               $response  = array(
-                                   'error' => 200,
-                                   'message' => 'Pedido encontrado exitósamente',
-                                   'data' => array(
-                                       'order' => $order,
-                                       'customer' => $customer,
-                                       'line_items' => $lineItems
-                                   )
-                               );
-                           }
-                       }else{
-                           $response = array(
-                               'error' => 400,
-                               'message' => 'El email ingresado no coincide con el correo registrado en el pedido. Por favor inténtelo con otro correo.',
-                               'order' => $order,
-                           );
-                       }
-
-                     }//past date
+                             $response  = array(
+                                 'error' => 200,
+                                 'message' => 'Pedido encontrado exitósamente',
+                                 'data' => array(
+                                     'order' => $order,
+                                     'customer' => $customer,
+                                     'line_items' => $lineItems
+                                 )
+                             );
+                         }
+                     }else{
+                         $response = array(
+                             'error' => 400,
+                             'message' => 'El email ingresado no coincide con el correo registrado en el pedido. Por favor inténtelo con otro correo.',
+                             'order' => $order,
+                         );
+                     }
                  }else{
                      $response = array(
                          'error' => 400,
@@ -145,7 +140,6 @@ class Facturacom_Facturacion_IndexController extends Mage_Core_Controller_Front_
                 'f_municipio' => Mage::app()->getRequest()->getPost('f_municipio'),
                 'f_estado'    => Mage::app()->getRequest()->getPost('f_estado'),
                 'f_pais'      => Mage::app()->getRequest()->getPost('f_pais'),
-                'f_numregidtrib' => Mage::app()->getRequest()->getPost('f_numregidtrib'),
                 'f_cp'        => Mage::app()->getRequest()->getPost('f_cp'),
             );
 
@@ -198,65 +192,28 @@ class Facturacom_Facturacion_IndexController extends Mage_Core_Controller_Front_
             $response   = array();
 
             $payment_data = array(
-                'payment_m' => Mage::app()->getRequest()->getPost('payment_m'), // método de pago - value
-                'payment_t' => Mage::app()->getRequest()->getPost('payment_t'), // método de pago - text
-                't_payment_m' => Mage::app()->getRequest()->getPost('t_payment_m'), // forma de pago - value
-                't_payment_t' => Mage::app()->getRequest()->getPost('t_payment_t'), // forma de pago - text
-                'num_cta_m' => Mage::app()->getRequest()->getPost('num_cta_m') // num de cuenta
+                'payment_m' => Mage::app()->getRequest()->getPost('payment_m'),
+                'payment_t' => Mage::app()->getRequest()->getPost('payment_t'),
+                'num_cta_m' => Mage::app()->getRequest()->getPost('num_cta_m')
             );
 
             //helpers
             $facturahelper = Mage::helper('facturacom_facturacion/factura');
 
-            $invoice = $facturahelper->createInvoice(
-                $payment_data['payment_m'],
-                $payment_data['payment_t'],
-                $payment_data['t_payment_m'],
-                $payment_data['t_payment_t'],
-                $payment_data['num_cta_m']
-            );
+            $invoice = $facturahelper->createInvoice($payment_data['payment_m'], $payment_data['payment_t'], $payment_data['num_cta_m'] );
 
-            if ($invoice->status == "success") {
-                $response  = array(
-                    'error' => 200,
-                    'message' => 'Factura creada exitósamente',
-                    'data' => array(
-                        'invoice' => $invoice
-                    )
-                );
-            } else {
-                $response  = array(
-                    'error' => 400,
-                    'message' => 'Ha ocurrido un error.',
-                    'data' => $invoice,
-                );
-            }
+            $response  = array(
+                'error' => 200,
+                'message' => 'Factura creada exitósamente',
+                'data' => array(
+                    'invoice' => $invoice
+                )
+            );
 
             $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($response));
         }else{
             die('AJAX request only');
         }
-    }
-
-    static function validateDayOff($completed_date){
-
-        //$completed_date =  date("Y-m-d", strtotime("-1 month", strtotime($completed_date)));
-        $order_month = date("m",strtotime($completed_date));
-        $current_month = date("m");
-        $current_day = date("d");
-
-        //get configuration plugin
-        $conf = (object) current(Mage::getModel('facturacom_facturacion/conf')->getCollection()->getData());
-
-        if($order_month != $current_month){
-            $order_day = date("d",strtotime($completed_date));
-            if($order_month < $current_month){
-                if($current_day > $conf->dayoff){
-                    return false;
-                }
-            }
-        }
-        return true;
     }
 
 }
