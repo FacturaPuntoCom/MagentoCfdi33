@@ -627,16 +627,15 @@ $jq(function() {
       $jq("#step-three").stop().hide();
       $jq("#step-three .loader_content").hide();
 
+      if(response.error == 400){
+          $jq("#result-msg-title").text(response.data.message);
 
-      if(response.data.invoice.status == 'success'){
+          //   $jq('#btn-success-email').stop().hide();
+          $jq('#btn-success-pdf').stop().hide();
+          $jq('#btn-success-xml').stop().hide();
+      }else{
         $jq('#btn-success-pdf').stop().show().attr('href','https://factura.com/api/publica/invoice/'+response.data.invoice.INV.UID+'/pdf');
         $jq('#btn-success-xml').stop().show().attr('href','https://factura.com/api/publica/invoice/'+response.data.invoice.INV.UID+'/xml');
-      }else{
-        $jq("#result-msg-title").text(response.data.invoice.message);
-
-        //   $jq('#btn-success-email').stop().hide();
-        $jq('#btn-success-pdf').stop().hide();
-        $jq('#btn-success-xml').stop().hide();
       }
 
       $jq("#step-four").stop().fadeIn("slow");

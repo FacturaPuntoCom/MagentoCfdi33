@@ -426,7 +426,7 @@ class Facturacom_Facturacion_Helper_Factura extends Mage_Core_Helper_Abstract
 
         $invoice = $this->apiCall($apimethod, $request, $params, null, 3);
 
-        if($invoice->status == 'success'){
+        if(isset($invoice->status) && $invoice->status == 'success'){
             //save order into orders db table
             $order_data = array(
                 'order_number'  => $order->order_number,
