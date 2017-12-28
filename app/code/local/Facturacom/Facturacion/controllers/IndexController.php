@@ -216,7 +216,7 @@ class Facturacom_Facturacion_IndexController extends Mage_Core_Controller_Front_
                 $payment_data['num_cta_m']
             );
 
-            if (isset($invoice->status) && $invoice->status == "success") {
+            if (isset($invoice->response) && $invoice->response == "success") {
                 $response  = array(
                     'error' => 200,
                     'message' => 'Factura creada exitósamente',

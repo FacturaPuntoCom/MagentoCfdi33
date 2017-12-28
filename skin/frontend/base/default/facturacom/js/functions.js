@@ -628,14 +628,14 @@ $jq(function() {
       $jq("#step-three .loader_content").hide();
 
       if(response.error == 400){
-          $jq("#result-msg-title").text(response.data.message);
+          $jq("#result-msg-title").html(response.data.message);
 
           //   $jq('#btn-success-email').stop().hide();
           $jq('#btn-success-pdf').stop().hide();
           $jq('#btn-success-xml').stop().hide();
       }else{
-        $jq('#btn-success-pdf').stop().show().attr('href','https://factura.com/api/publica/invoice/'+response.data.invoice.INV.UID+'/pdf');
-        $jq('#btn-success-xml').stop().show().attr('href','https://factura.com/api/publica/invoice/'+response.data.invoice.INV.UID+'/xml');
+        $jq('#btn-success-pdf').stop().show().attr('href','https://factura.com/api/publica/invoice/'+response.data.invoice.uid+'/pdf');
+        $jq('#btn-success-xml').stop().show().attr('href','https://factura.com/api/publica/invoice/'+response.data.invoice.uid+'/xml');
       }
 
       $jq("#step-four").stop().fadeIn("slow");
