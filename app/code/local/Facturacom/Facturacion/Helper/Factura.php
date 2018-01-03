@@ -9,6 +9,7 @@
  * – getAccountDetails
  * – getPaymentMethods
  * – getPaymentMethodsType
+ * - getCountries
  * - getSeries
  * - getRegimen
  * - getTipoRelacion
@@ -425,12 +426,16 @@ class Facturacom_Facturacion_Helper_Factura extends Mage_Core_Helper_Abstract
 
         $invoice = $this->apiCall($apimethod, $request, $params, null, 3);
 
-        if($invoice->data->response == 'success'){
+        // $this->dd($invoice);
+        // $this->dd('die',true);
+        // die;
+
+        if(isset($invoice->response) && $invoice->response == 'success'){
             //save order into orders db table
             $order_data = array(
                 'order_number'  => $order->order_number,
                 'id'            => $order->id,
-                'f_uid'         => $invoice->data->invoice_uid,
+                'f_uid'         => $invoice->uid,
                 'source'        => 'magento',
             );
             $this->saveLocalOrder($order_data);
