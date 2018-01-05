@@ -116,7 +116,7 @@ class Facturacom_Facturacion_Helper_Order extends Mage_Core_Helper_Abstract
                 'name'  => $orderData['shipping_description'],
                 'qty'   => 1,
                 'base_price' => $orderData['shipping_amount'],
-                'price' => $orderData['shipping_amount'] + $orderData['shipping_tax_amount'],
+                'price' => $orderData['shipping_amount'], // + $orderData['shipping_tax_amount'],
                 'discount' => 0,
                 'shipping' => true,
             );

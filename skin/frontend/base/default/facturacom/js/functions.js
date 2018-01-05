@@ -634,8 +634,8 @@ $jq(function() {
           $jq('#btn-success-pdf').stop().hide();
           $jq('#btn-success-xml').stop().hide();
       }else{
-        $jq('#btn-success-pdf').stop().show().attr('href','https://factura.com/api/publica/invoice/'+response.data.invoice.uid+'/pdf');
-        $jq('#btn-success-xml').stop().show().attr('href','https://factura.com/api/publica/invoice/'+response.data.invoice.uid+'/xml');
+        $jq('#btn-success-pdf').stop().show().attr('href','https://factura.com/api/v3/cfdi33/'+response.data.invoice.uid+'/pdf');
+        $jq('#btn-success-xml').stop().show().attr('href','https://factura.com/api/v3/cfdi33/'+response.data.invoice.uid+'/xml');
       }
 
       $jq("#step-four").stop().fadeIn("slow");
