@@ -110,13 +110,16 @@ class Facturacom_Facturacion_Helper_Order extends Mage_Core_Helper_Abstract
 
         $orderData = $order->getData();
 
-        if($orderData['shipping_method'] && $orderData['shipping_amount'] > 0){
+        if($orderData['shipping_method']){
+
+            $shipping_amount = ($orderData['shipping_amount'] > 0) ? $orderData['shipping_amount'] : 0.01;
+
             $shipping = array(
                 'id'    => $orderData['shipping_method'],
                 'name'  => $orderData['shipping_description'],
                 'qty'   => 1,
-                'base_price' => $orderData['shipping_amount'],
-                'price' => $orderData['shipping_amount'], // + $orderData['shipping_tax_amount'],
+                'base_price' => $shipping_amount, //$orderData['shipping_amount'],
+                'price' => $shipping_amount, //$orderData['shipping_amount'], // + $orderData['shipping_tax_amount'],
                 'discount' => 0,
                 'shipping' => true,
             );
