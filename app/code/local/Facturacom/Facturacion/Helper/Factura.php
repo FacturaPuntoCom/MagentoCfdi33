@@ -149,7 +149,7 @@ class Facturacom_Facturacion_Helper_Factura extends Mage_Core_Helper_Abstract
         $countries = array();
         if (isset($result->data)) {
 
-            foreach ($data as $value) {
+            foreach ($result->data as $value) {
                 $countries[$value->key] = $value->name;
             }
 
@@ -237,7 +237,7 @@ class Facturacom_Facturacion_Helper_Factura extends Mage_Core_Helper_Abstract
         $response = array();
 
         if (isset($result->data)) {
-            foreach ($data as $key => $value) {
+            foreach ($result->data as $key => $value) {
                 $response[$value->key] = $value->name;
             }
         }
@@ -258,7 +258,7 @@ class Facturacom_Facturacion_Helper_Factura extends Mage_Core_Helper_Abstract
         $response = array();
 
         if (isset($result->data)) {
-            foreach ($data as $key => $value) {
+            foreach ($result->data as $key => $value) {
                 $response[$value->key] = $value->name;
             }
         }
