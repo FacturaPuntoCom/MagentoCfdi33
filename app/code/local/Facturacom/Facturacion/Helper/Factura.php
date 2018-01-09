@@ -99,14 +99,19 @@ class Facturacom_Facturacion_Helper_Factura extends Mage_Core_Helper_Abstract
     public function getPaymentMethodsType(){
         $apimethod = 'catalogo/FormaPago';
         $request = 'GET';
-        $data = $this->apiCall($apimethod, $request, null, null, 3)->data;
-        $types = array();
+        $result = $this->apiCall($apimethod, $request, null, null, 3);
 
-        foreach ($data as $value) {
-            $types[$value->key] = $value->name;
+        if (isset($result->data)) {
+            $types = array();
+
+            foreach ($result->data as $value) {
+                $types[$value->key] = $value->name;
+            }
+
+            return $types;
         }
 
-        return $types;
+        return array();
     }
 
     /**
@@ -117,11 +122,15 @@ class Facturacom_Facturacion_Helper_Factura extends Mage_Core_Helper_Abstract
     public function getPaymentMethods(){
         $apimethod = 'catalogo/MetodoPago';
         $request = 'GET';
-        $data = $this->apiCall($apimethod, $request, null, null, 3)->data;
-        $methods = array();
+        $result = $this->apiCall($apimethod, $request, null, null, 3);
 
-        foreach ($data as $value) {
-            $methods[$value->key] = $value->name;
+        $methods = array();
+        if (isset($result->data)) {
+
+            foreach ($result->data as $value) {
+                $methods[$value->key] = $value->name;
+            }
+
         }
 
         return $methods;
@@ -135,18 +144,22 @@ class Facturacom_Facturacion_Helper_Factura extends Mage_Core_Helper_Abstract
     public function getCountries(){
         $apimethod = 'catalogo/Pais';
         $request = 'GET';
-        $data = $this->apiCall($apimethod, $request, null, null, 3)->data;
-        $countries = array();
+        $result = $this->apiCall($apimethod, $request, null, null, 3);
 
-        foreach ($data as $value) {
-            $countries[$value->key] = $value->name;
+        $countries = array();
+        if (isset($result->data)) {
+
+            foreach ($data as $value) {
+                $countries[$value->key] = $value->name;
+            }
+
         }
 
         return $countries;
     }
 
     /**
-     * Get units from the catalog.
+     * Get Series from Factura.com.
      *
      * @return array
      */
@@ -154,18 +167,22 @@ class Facturacom_Facturacion_Helper_Factura extends Mage_Core_Helper_Abstract
         $apimethod = 'series';
         $request = 'GET';
 
-        $data = $this->apiCall($apimethod, $request)->data;
-        $response = array();
+        $result = $this->apiCall($apimethod, $request);
 
-        foreach ($data as $key => $value) {
-            $response[$value->SerieID] = 'Serie: ' . $value->SerieName . ' - Tipo: ' . $value->SerieType;
+        $response = array();
+        if (isset($result->data)) {
+
+            foreach ($result->data as $key => $value) {
+                $response[$value->SerieID] = 'Serie: ' . $value->SerieName . ' - Tipo: ' . $value->SerieType;
+            }
+
         }
 
         return $response;
     }
 
     /**
-     * Get Regimen Fiscal from the catalog.
+     * Get Currencies from Factura.com.
      *
      * @return array
      */
@@ -173,11 +190,15 @@ class Facturacom_Facturacion_Helper_Factura extends Mage_Core_Helper_Abstract
         $apimethod = 'catalogo/Moneda';
         $request = 'GET';
 
-        $data = $this->apiCall($apimethod, $request, null, null, 3)->data;
-        $response = array();
+        $result = $this->apiCall($apimethod, $request, null, null, 3);
 
-        foreach ($data as $key => $value) {
-            $response[$value->key] = $value->name;
+        $response = array();
+        if (isset($result->data)) {
+
+            foreach ($result->data as $key => $value) {
+                $response[$value->key] = $value->name;
+            }
+
         }
 
         return $response;
@@ -192,18 +213,19 @@ class Facturacom_Facturacion_Helper_Factura extends Mage_Core_Helper_Abstract
         $apimethod = 'catalogo/RegimenFiscal';
         $request = 'GET';
 
-        $data = $this->apiCall($apimethod, $request, null, null, 3)->data;
+        $result = $this->apiCall($apimethod, $request, null, null, 3);
         $response = array();
-
-        foreach ($data as $key => $value) {
-            $response[$value->key] = $value->name;
+        if (isset($result->data)) {
+            foreach ($result->data as $key => $value) {
+                $response[$value->key] = $value->name;
+            }
         }
 
         return $response;
     }
 
     /**
-     * Get Regimen Fiscal from the catalog.
+     * Get Tipo Relacion from the catalog.
      *
      * @return array
      */
@@ -211,11 +233,13 @@ class Facturacom_Facturacion_Helper_Factura extends Mage_Core_Helper_Abstract
         $apimethod = 'catalogo/Relacion';
         $request = 'GET';
 
-        $data = $this->apiCall($apimethod, $request, null, null, 3)->data;
+        $result = $this->apiCall($apimethod, $request, null, null, 3);
         $response = array();
 
-        foreach ($data as $key => $value) {
-            $response[$value->key] = $value->name;
+        if (isset($result->data)) {
+            foreach ($data as $key => $value) {
+                $response[$value->key] = $value->name;
+            }
         }
 
         return $response;
@@ -230,11 +254,13 @@ class Facturacom_Facturacion_Helper_Factura extends Mage_Core_Helper_Abstract
         $apimethod = 'catalogo/UsoCfdi';
         $request = 'GET';
 
-        $data = $this->apiCall($apimethod, $request, null, null, 3)->data;
+        $result = $this->apiCall($apimethod, $request, null, null, 3);
         $response = array();
 
-        foreach ($data as $key => $value) {
-            $response[$value->key] = $value->name;
+        if (isset($result->data)) {
+            foreach ($data as $key => $value) {
+                $response[$value->key] = $value->name;
+            }
         }
 
         return $response;
