@@ -80,6 +80,20 @@ class Facturacom_Facturacion_Helper_Factura extends Mage_Core_Helper_Abstract
     }
 
     /**
+     * Download XML from Factura.com
+     *
+     * @param string $uid
+     * @return object
+     */
+    public function downlodFile($type, $id){
+        $apimethod = 'cfdi33/'.$id.'/'.$type;
+        $request = 'GET';
+        $file = $this->apiCall($apimethod, $request, null, false, 3);
+
+        return $file;
+    }
+
+    /**
 	 * Create invoice in factura.com system
 	 *
 	 * @return Object
