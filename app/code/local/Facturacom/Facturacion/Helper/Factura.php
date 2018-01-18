@@ -513,9 +513,10 @@ class Facturacom_Facturacion_Helper_Factura extends Mage_Core_Helper_Abstract
      * @param Array $params
      * @param Boolean $debug
      * @param String $version
+     * @param String $raw   Return raw data or json
      * @return Object
      */
-    private function apiCall($apimethod, $request, $params = null, $debug = null, $version = null){
+    private function apiCall($apimethod, $request, $params = null, $debug = null, $version = null, $raw = false){
 
         //Getting configuration data
         $conf = (object) current(Mage::getModel('facturacom_facturacion/conf')->getCollection()->getData());
@@ -575,6 +576,10 @@ class Facturacom_Facturacion_Helper_Factura extends Mage_Core_Helper_Abstract
             curl_close($ch);
         }catch(Exception $e){
             print('Exception occured: ' . $e->getMessage());die;
+        }
+
+        if($raw){
+            return $data;
         }
 
         return json_decode($data);

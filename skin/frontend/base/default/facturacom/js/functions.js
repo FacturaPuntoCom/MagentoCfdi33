@@ -488,8 +488,9 @@ $jq(function() {
         $jq('#result-msg-title').text(response.message);
 
         // $jq('#btn-success-email').stop().show().attr('data-invoice', response.metadata.uid);
-        $jq('#btn-success-pdf').stop().show().attr('href','https://factura.com/api/publica/invoice/'+response.data.order_local.invoice_id+'/pdf');
-        $jq('#btn-success-xml').stop().show().attr('href','https://factura.com/api/publica/invoice/'+response.data.order_local.invoice_id+'/xml');
+
+        $jq('#btn-success-pdf').stop().show().attr('href',$jq('#siteurl').val() + 'index.php/facturacion/index/downloadpdf/id/'+response.data.order_local.invoice_id);
+        $jq('#btn-success-xml').stop().show().attr('href',$jq('#siteurl').val() + 'index.php/facturacion/index/downloadxml/id/'+response.data.order_local.invoice_id);
         $jq('#step-one').stop().hide();
         $jq('#step-four').stop().fadeIn('slow');
         return false;
@@ -634,8 +635,8 @@ $jq(function() {
           $jq('#btn-success-pdf').stop().hide();
           $jq('#btn-success-xml').stop().hide();
       }else{
-        $jq('#btn-success-pdf').stop().show().attr('href','https://factura.com/api/v3/cfdi33/'+response.data.invoice.uid+'/pdf');
-        $jq('#btn-success-xml').stop().show().attr('href','https://factura.com/api/v3/cfdi33/'+response.data.invoice.uid+'/xml');
+        $jq('#btn-success-pdf').stop().show().attr('href',$jq('#siteurl').val() + 'index.php/facturacion/index/downloadpdf/id/'+response.data.invoice.uid);
+        $jq('#btn-success-xml').stop().show().attr('href',$jq('#siteurl').val() + 'index.php/facturacion/index/downloadxml/id/'+response.data.invoice.uid);
       }
 
       $jq("#step-four").stop().fadeIn("slow");
