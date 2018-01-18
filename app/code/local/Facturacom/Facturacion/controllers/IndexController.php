@@ -238,6 +238,60 @@ class Facturacom_Facturacion_IndexController extends Mage_Core_Controller_Front_
         }
     }
 
+    /**
+     * Download XML file
+     */
+    public function downloadxmlAction(){
+        //get parameter
+        $id = Mage::app()->getRequest()->getParam('id');
+
+        //helpers
+        $facturahelper = Mage::helper('facturacom_facturacion/factura');
+        $file = $facturahelper->downlodFile('xml', $id);
+
+        header('Content-type: text/xml');
+        header('Content-Disposition: attachment; filename="'.$id.'.xml"');
+
+        print_r($file);
+        exit();
+    }
+
+    /**
+     * Download XML file
+     */
+    public function downloadxmlAction(){
+        //get parameter
+        $id = Mage::app()->getRequest()->getParam('id');
+
+        //helpers
+        $facturahelper = Mage::helper('facturacom_facturacion/factura');
+        $raw = $facturahelper->downlodFile('xml', $id);
+
+        header('Content-type: text/xml');
+        header('Content-Disposition: attachment; filename="'.$id.'.xml"');
+
+        echo $raw;
+        exit();
+    }
+
+    /**
+     * Download PDF file
+     */
+    public function downloadpdfAction(){
+        //get parameter
+        $id = Mage::app()->getRequest()->getParam('id');
+        header("Content-type:application/pdf");
+        header("Content-Disposition:attachment;filename=' . $id . '.pdf'");
+
+        //helpers
+        $facturahelper = Mage::helper('facturacom_facturacion/factura');
+        $raw = file_get_contents($facturahelper->downlodFile('pdf', $id));
+
+
+        echo $raw;
+        exit();
+    }
+
     static function validateDayOff($completed_date){
 
         //$completed_date =  date("Y-m-d", strtotime("-1 month", strtotime($completed_date)));

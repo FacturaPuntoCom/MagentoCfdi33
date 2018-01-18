@@ -187,15 +187,22 @@ class Facturacom_Facturacion_Adminhtml_InvoicesController extends Mage_Adminhtml
 
     /**
      * Download PDF file.
-     * @TODO add conf. apiurl -url diferente-
+     *
+     * @return Response
      */
     public function downloadAction(){
-        $id = $this->getRequest()->getParam('id');
-        $file = 'https://factura.com/api/publica/invoice/'.$id.'/pdf';
+        //get parameter
+        $id = Mage::app()->getRequest()->getParam('id');
+
+        //helpers
+        $facturahelper = Mage::helper('facturacom_facturacion/factura');
+        $file = $facturahelper->downlodFile('pdf', $id);
 
         header('Content-type: application/pdf');
         header('Content-Disposition: attachment; filename="'.$id.'.pdf"');
-        readfile($file);
+
+        print_r($file);
+        exit();
     }
 
     public function messageAction(){
