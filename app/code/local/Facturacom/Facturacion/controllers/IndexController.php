@@ -247,24 +247,6 @@ class Facturacom_Facturacion_IndexController extends Mage_Core_Controller_Front_
 
         //helpers
         $facturahelper = Mage::helper('facturacom_facturacion/factura');
-        $file = $facturahelper->downlodFile('xml', $id);
-
-        header('Content-type: text/xml');
-        header('Content-Disposition: attachment; filename="'.$id.'.xml"');
-
-        print_r($file);
-        exit();
-    }
-
-    /**
-     * Download XML file
-     */
-    public function downloadxmlAction(){
-        //get parameter
-        $id = Mage::app()->getRequest()->getParam('id');
-
-        //helpers
-        $facturahelper = Mage::helper('facturacom_facturacion/factura');
         $raw = $facturahelper->downlodFile('xml', $id);
 
         header('Content-type: text/xml');
