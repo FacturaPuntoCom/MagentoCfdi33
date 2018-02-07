@@ -262,13 +262,13 @@ class Facturacom_Facturacion_IndexController extends Mage_Core_Controller_Front_
     public function downloadpdfAction(){
         //get parameter
         $id = Mage::app()->getRequest()->getParam('id');
-        header("Content-type:application/pdf");
-        header("Content-Disposition:attachment;filename=' . $id . '.pdf'");
 
         //helpers
         $facturahelper = Mage::helper('facturacom_facturacion/factura');
-        $raw = file_get_contents($facturahelper->downlodFile('pdf', $id));
+        $raw = $facturahelper->downlodFile('pdf', $id);
 
+        header("Content-type:application/pdf");
+        header('Content-Disposition: attachment; filename="'.$id.'.pdf"');
 
         echo $raw;
         exit();

@@ -88,7 +88,7 @@ class Facturacom_Facturacion_Helper_Factura extends Mage_Core_Helper_Abstract
     public function downlodFile($type, $id){
         $apimethod = 'cfdi33/'.$id.'/'.$type;
         $request = 'GET';
-        $file = $this->apiCall($apimethod, $request, null, false, 3);
+        $file = $this->apiCall($apimethod, $request, null, false, 3, true);
 
         return $file;
     }
