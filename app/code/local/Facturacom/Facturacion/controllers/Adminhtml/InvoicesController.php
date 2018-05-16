@@ -111,15 +111,10 @@ class Facturacom_Facturacion_Adminhtml_InvoicesController extends Mage_Adminhtml
             // Save data in database
             $model = Mage::getSingleton('facturacom_facturacion/conf');
             $sandbox = (isset($postData['sandbox'])) ? $postData['sandbox'] : 0;
-            $apiurl = 'https://factura.com/api/';
             $iepsconfig = (isset($postData['iepsconfig'])) ? $postData['iepsconfig'] : 0;
             $iepscalc = (isset($postData['iepscalc'])) ? $postData['iepscalc'] : 0;
-
             settype($sandbox, "integer");
-
-            if($sandbox == 1){
-                $apiurl = 'http://devfactura.in/api/';
-            }
+            $apiurl = ($sandbox == 1 ? 'http://devfactura.in/api/' : 'https://factura.com/api/');
 
             $configData = array(
                 'form_key'          => $postData['form_key'],
@@ -141,8 +136,6 @@ class Facturacom_Facturacion_Adminhtml_InvoicesController extends Mage_Adminhtml
                 'iepsconfig'        => $iepsconfig,
                 'iepscalc'          => $iepscalc,
                 'moneda'            => $postData['moneda'],
-                'reg_fiscal'        => $postData['reg_fiscal'],
-                'tipo_relacion'     => $postData['tipo_relacion'],
                 'uso_cfdi'          => $postData['uso_cfdi'],
             );
 
