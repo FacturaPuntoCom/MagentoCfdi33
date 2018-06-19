@@ -383,11 +383,11 @@ class Facturacom_Facturacion_Helper_Factura extends Mage_Core_Helper_Abstract
             $tax_importe = $tax_base * $tax_tasa;
             $impuestos = array();
             $impuestos["Traslados"][0] = array(
-                "Base" => round($tax_base, 2),
+                "Base" => round($tax_base, 6),
                 "Impuesto" => "002",
                 "TipoFactor" => "Tasa",
                 "TasaOCuota" => $tax_tasa,
-                "Importe" => round($tax_importe, 2),
+                "Importe" => round($tax_importe, 6),
             );
 
             // si tiene activado IEPS, agregar a impuestos.
@@ -397,11 +397,11 @@ class Facturacom_Facturacion_Helper_Factura extends Mage_Core_Helper_Abstract
                 $ieps_importe = $tax_base * $ieps_tasa;
 
                 $iesp_tmp = array(
-                    "Base" => round($tax_base, 2),
+                    "Base" => round($tax_base, 6),
                     "Impuesto" => "003",
                     "TipoFactor" => "Tasa",
                     "TasaOCuota" => $ieps_tasa,
-                    "Importe" => round($ieps_importe, 2),
+                    "Importe" => round($ieps_importe, 6),
                 );
 
                 array_push($impuestos["Traslados"], $iesp_tmp);
@@ -413,9 +413,9 @@ class Facturacom_Facturacion_Helper_Factura extends Mage_Core_Helper_Abstract
                     "Cantidad" => $product->qty,
                     "ClaveUnidad" => 'E48',
                     "Unidad" => 'Unidad de Servicio',
-                    "ValorUnitario" => round($product->base_price, 2),
+                    "ValorUnitario" => round($product->base_price, 6),
                     "Descripcion" => $this->limit_text($product->name, 100),
-                    "Descuento" => round($product->discount, 2),
+                    "Descuento" => round($product->discount, 6),
                     "Impuestos" => $impuestos,
                 );
             }else{
@@ -425,9 +425,9 @@ class Facturacom_Facturacion_Helper_Factura extends Mage_Core_Helper_Abstract
                     "Cantidad" => $product->qty,
                     "ClaveUnidad" => $_product->getData('claveUnidad'),
                     "Unidad" => $_product->getData('textoUnidad'),
-                    "ValorUnitario" => round($product->base_price, 2),
+                    "ValorUnitario" => round($product->base_price, 6),
                     "Descripcion" => $this->limit_text($_product->getShortDescription(), 100),
-                    "Descuento" => round($product->discount, 2),
+                    "Descuento" => round($product->discount, 6),
                     "Impuestos" => $impuestos,
                 );
             }
