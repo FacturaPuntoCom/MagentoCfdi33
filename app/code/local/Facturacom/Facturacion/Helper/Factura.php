@@ -484,6 +484,24 @@ class Facturacom_Facturacion_Helper_Factura extends Mage_Core_Helper_Abstract
 
         return $invoice;
     }
+    
+    /**
+	 * Cancel invoice in factura.com system
+	 *
+	 * @param String $uid
+	 * @param String $motivo
+	 * @param String $folioSustituto
+	 * @return Object
+	 */
+    public function cancelInvoice($uid, $motivo, $folioSustituto)
+    {
+        $apimethod = 'cfdi33/' . $uid . '/cancel';
+        $request = 'POST';
+        $params = ['motivo' => $motivo, 'folioSustituto' => $folioSustituto];
+        $customer = $this->apiCall($apimethod, $request, $params, false, 3, false);
+        return $customer;
+    }
+
 
     /**
      * Get exchange rate from currency given to MXN.

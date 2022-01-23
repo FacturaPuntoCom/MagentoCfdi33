@@ -2,8 +2,10 @@
 
 Esta actualización es importante, ya que con ella este Módulo es compatible con la facturación CFDI 3.3, además que tiene correcciones importantes en su funcionamiento y compatibilidad.
 
-
 ## Change Log
+
+## 2.1
+* Se agregó la nueva forma de cancelación con motivo para la reforma fiscal 2022
 
 ### 2.0 
 * Compatibilidad con la facturación CDFI 3.3
