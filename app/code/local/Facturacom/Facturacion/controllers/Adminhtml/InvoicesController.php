@@ -204,6 +204,88 @@ class Facturacom_Facturacion_Adminhtml_InvoicesController extends Mage_Adminhtml
     }
 
     /**
+     * Cancel invoice
+     */
+    public function cancelAction(){
+        
+        //Get id if available
+        $id = $this->getRequest()->getParam('id');
+
+        $model = Mage::getModel('facturacom_facturacion/invoices');
+
+        if($id){
+
+            //Load record
+            $model->load($id);
+
+            //check if record is loaded
+            if(!$model->getId()){
+                Mage::getSingleton('adminhtml/session')->addError($this->__('This invoice no longer exists.'));
+                $this->_redirect('*/*/');
+                return;
+            }
+        }
+
+        $this->_title($model->getId() ? $model->getOrderId() : $this->__('New Invoice'));
+
+        $data = Mage::getSingleton('adminhtml/session')->getOrderData(true);
+
+        if(!empty($data)){
+            $model->setData($data);
+        }
+
+        Mage::register('facturacom_facturacion', $model);
+
+        $this->_initAction()
+             ->_addBreadcrumb( $this->__('Cancel Invoice') , $this->__('Cancel Invoice'))
+             ->_addContent($this->getLayout()->createBlock('facturacom_facturacion/adminhtml_invoices_cancel')->setData('action', $this->getUrl('*/*/aceptCancelation')))
+             ->renderLayout();
+    }
+
+    /**
+     * Acept cancelation
+     */
+    public function aceptCancelationAction()
+    {
+        $id = $this->getRequest()->getParam('id');
+        
+        if($postData = $this->getRequest()->getPost()){
+        
+            if($id){
+
+                $model = Mage::getModel('facturacom_facturacion/invoices');
+                $model->load($id);
+
+                if($model->getId()){
+                        
+                    $uid = $model->getData('invoice_id');
+                    $facturahelper = Mage::helper('facturacom_facturacion/factura');
+                    $invoice = $facturahelper->cancelInvoice($uid, $postData['motivo'], $postData['folioSustituto']);
+        
+                    if (isset($invoice->response) && $invoice->response == "success") {
+                        Mage::getSingleton('adminhtml/session')->addSuccess($this->__('La factura se canceló correctamente'));
+                        $model->setStatus(2);
+                        $model->save();
+                        $this->_redirect('*/*/');
+                    } else if($invoice->message) {
+                        Mage::getSingleton('adminhtml/session')->addError($this->__('Error al cancelar: ' . $invoice->message));
+                    } else {
+                        Mage::getSingleton('adminhtml/session')->addError($this->__('Error al cancelar: Por el momento no se pueden cancelar facturas, por favor contacte a soporte'));
+                    }
+
+                } else {
+                    Mage::getSingleton('adminhtml/session')->addError($this->__('El invoice no existe'));
+                }
+            } else {
+                Mage::getSingleton('adminhtml/session')->addError($this->__('El id del invoice no es válido'));
+            }
+
+        
+        }
+        $this->_redirect('*/*/cancel/id/' . $id);
+    }
+
+    /**
      * Initialize action
      *
      * Here, we set the breadcrumbs and the active menu

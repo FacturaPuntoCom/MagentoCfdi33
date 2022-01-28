@@ -64,6 +64,15 @@ class Facturacom_Facturacion_Block_Adminhtml_Invoices_Grid extends Mage_Adminhtm
             'index'  => 'status'
         ));
 
+        $this->addColumn('actions', array(
+            'header' => $this->__('Actions'),
+            'index' => 'id',
+            'width' => '170px',
+            'filter' => false,
+            'sortable'  => false,
+            'renderer'  => 'Facturacom_Facturacion_Block_Adminhtml_Invoices_Cancel_Render',
+        ));
+
         return parent::_prepareColumns();
     }
 
