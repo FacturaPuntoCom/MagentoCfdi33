@@ -114,7 +114,7 @@ class Facturacom_Facturacion_Adminhtml_InvoicesController extends Mage_Adminhtml
             $iepsconfig = (isset($postData['iepsconfig'])) ? $postData['iepsconfig'] : 0;
             $iepscalc = (isset($postData['iepscalc'])) ? $postData['iepscalc'] : 0;
             settype($sandbox, "integer");
-            $apiurl = ($sandbox == 1 ? 'http://devfactura.in/api/' : 'https://factura.com/api/');
+            $apiurl = ($sandbox == 1 ? 'https://sandbox.factura.com/api/' : 'https://api.factura.com/');
 
             $configData = array(
                 'form_key'          => $postData['form_key'],
