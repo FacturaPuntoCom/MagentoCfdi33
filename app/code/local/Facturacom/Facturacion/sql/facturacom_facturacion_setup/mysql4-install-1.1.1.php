@@ -42,6 +42,6 @@ $installer->run("
 ");
 $installer->run("
     INSERT INTO {$this->getTable('facturacom_facturacion/conf')} (`apiurl`,`access_token`)
-        VALUES ('https://factura.com/api/v1/','c963d66bb5ff4b1eb3927744825e820a1f7fd6d6');
+        VALUES ('https://api.factura.com/v1/','c963d66bb5ff4b1eb3927744825e820a1f7fd6d6');
 ");
 $installer->endSetup();
